@@ -1,3 +1,11 @@
+def PrintRefund(TotalMoneyGiven):
+    '''
+    Refunds total money given by the user. To avoid redundancy
+    '''
+    print("\nPayment not confirmed. Cancelling the order.") # Notifies user of the purchase cancellation
+    print(f"Refunding {TotalMoneyGiven}AED...") # Notifies user of the amount of the refund owed 
+    print(f"{TotalMoneyGiven}AED has been added to your invertory\n") # Notifies user that thei money has been refunded
+
 def PrintItemDetail (ChosenItem, ItemPrice, TotalMoneyGiven):
     '''
     Prints item details including selected item, price, and total money given by the user. To avoid redundancy
@@ -85,11 +93,11 @@ def PaymentProcess (ChosenItem, ItemPrice, CurrencyOptions, Navigation):
 
             # Refunds money and goes back to item selection, if user inputs 'back'
             if UserPPInput == "back":
-                print(f"\nRefunding {TotalMoneyGiven}...") # Notifies user of the amount of the refund owed 
-                print(f"{TotalMoneyGiven}AED has been added to your invertory") # Notifies user that thei money has been refunded
+                PrintRefund(TotalMoneyGiven)
                 return None
             # Exits if user inputs 'q'
             elif UserPPInput == "q":
+                PrintRefund(TotalMoneyGiven)
                 print("Thank you for using our vending machine!")
                 quit()
         try:
@@ -145,14 +153,15 @@ def PurchaseConfirmation (ChosenItem, TotalMoneyGiven, ItemPrice):
 
     #If user cancels payment    
     elif PaymentConfirmation == 'no':
-        print("\nPayment not confirmed. Cancelling the order.") # Notifies user of the purchase cancellation
-        print(f"Refunding {TotalMoneyGiven}AED...") # Notifies user of the amount of the refund owed 
-        print(f"{TotalMoneyGiven}AED has been added to your invertory\n") # Notifies user that thei money has been refunded
+        PrintRefund(TotalMoneyGiven)
+        return None
 
     # Exit if the user inputs 'q'
     else:
+        PrintRefund(TotalMoneyGiven)
         print("Thank you for using our vending machine!")
         quit()
+  
 
 
 
@@ -248,7 +257,9 @@ def vending_machine():
                     break  # Return to the item selection screen
 
                 # Confirms the purchase and processes change or refund if necessary, go back to category selection, or quit
-                PurchaseConfirmation(ChosenItem, TotalMoneyGiven, ItemPrice)
+                result = PurchaseConfirmation(ChosenItem, TotalMoneyGiven, ItemPrice)
+                if result is None: # User inputted back in purchase coonfirmation process
+                    break # Return to the item selection screen
                 
                 # End the session with a thank you message
                 print("Thank you for using our vending machine!")
